@@ -1,4 +1,5 @@
 const authService = require("../services/authService");
+const { successResponse, errorResponse } = require("../utils/apiResponse");
 
 const loginUser = async (req, res) => {
   try {
@@ -7,9 +8,9 @@ const loginUser = async (req, res) => {
       req.body.password
     );
 
-    res.json(data);
+    return successResponse(res, "Login successful", data);
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    return errorResponse(res, error.message, 401);
   }
 };
 
@@ -17,10 +18,10 @@ const registerUser = async (req, res) => {
   try {
     const data = await authService.registerUser(req.body);
 
-    res.status(201).json(data);
+    return successResponse(res, "User registered successfully", data, 201);
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: error.message });
+    return errorResponse(res, error.message, 400);
   }
 };
 
@@ -28,9 +29,9 @@ const getProfile = async (req, res) => {
   try {
     const data = await authService.getProfile(req.user._id);
 
-    res.json(data);
+    return successResponse(res, "Profile retrieved successfully", data);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return errorResponse(res, error.message, 404);
   }
 };
 

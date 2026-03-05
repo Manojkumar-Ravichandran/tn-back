@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { errorResponse } = require("../utils/apiResponse");
 
 const protect = async (req, res, next) => {
     let token;
@@ -21,18 +22,18 @@ const protect = async (req, res, next) => {
             return next();
         } catch (error) {
             console.error(error);
-            return res.status(401).json({ message: "Not authorized" });
+            return errorResponse(res, "Not authorized", 401);
         }
     }
 
-    return res.status(401).json({ message: "Not authorized, no token" });
+    return errorResponse(res, "Not authorized, no token", 401);
 };
 
 const admin = (req, res, next) => {
     if (req.user && req.user.role === "Admin") {
         next();
     } else {
-        res.status(403).json({ message: "Not authorized as an admin" });
+        return errorResponse(res, "Not authorized as an admin", 403);
     }
 };
 
