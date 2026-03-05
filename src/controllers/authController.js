@@ -19,6 +19,7 @@ const registerUser = async (req, res) => {
 
     res.status(201).json(data);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
