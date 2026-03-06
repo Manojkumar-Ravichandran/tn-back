@@ -21,10 +21,12 @@ app.use('/uploads', express.static('public/uploads'));
 const authRoutes = require('./src/routes/authRoutes');
 const templeRoutes = require('./src/routes/templeRoutes');
 const masterRoutes = require("./src/routes/masterRoutes");
+const contributorsRoutes = require("./src/routes/contributorRequestRoutes");
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/temples', templeRoutes);
 app.use("/api/v1/masters", masterRoutes);
+app.use("/api/v1/contributors", contributorsRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -4,6 +4,10 @@ const generateToken = require("../utils/generateToken");
 const loginUser = async (email, password) => {
   const user = await userRepo.findUserByEmail(email);
 
+  if (!user.isActive) {
+    throw new Error("Account not activated yet");
+  }
+
   if (!user || !(await user.matchPassword(password))) {
     throw new Error("Invalid email or password");
   }
@@ -59,8 +63,25 @@ const getProfile = async (userId) => {
   };
 };
 
+const setPassword = async (token, password) => {
+  const user = await userRepo.findUserByInviteToken(token);
+
+  if (!user || user.inviteTokenExpire < Date.now()) {
+    throw new Error("Invalid or expired invite link");
+  }
+
+  user.password = password;
+  user.isActive = true;
+  user.inviteToken = undefined;
+  user.inviteTokenExpire = undefined;
+
+  await user.save();
+  return { message: "Password set successfully" };
+};
+
 module.exports = {
   loginUser,
   registerUser,
   getProfile,
+  setPassword
 };

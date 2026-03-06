@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
 
         password: {
             type: String,
-            required: true
+            required: false
         },
 
         role: {
@@ -31,9 +31,17 @@ const userSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
+
         district: {
             type: String,
             required: false
+        },
+
+        inviteToken: String,
+        inviteTokenExpire: Date,
+        isActive: {
+            type: Boolean,
+            default: false
         },
 
         isVerified: {
@@ -48,7 +56,7 @@ const userSchema = new mongoose.Schema(
 // Hash password before saving
 userSchema.pre("save", async function () {
 
-    if (!this.isModified("password")) {
+    if (!this.password || !this.isModified("password")) {
         return;
     }
 

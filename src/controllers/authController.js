@@ -35,8 +35,19 @@ const getProfile = async (req, res) => {
   }
 };
 
+const setPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    const data = await authService.setPassword(token, password);
+    return successResponse(res, data.message);
+  } catch (error) {
+    return errorResponse(res, error.message, 400);
+  }
+};
+
 module.exports = {
   loginUser,
   registerUser,
   getProfile,
+  setPassword
 };
