@@ -19,8 +19,12 @@ app.use('/uploads', express.static('public/uploads'));
 
 //routes
 const authRoutes = require('./src/routes/authRoutes');
+const templeRoutes = require('./src/routes/templeRoutes');
+const masterRoutes = require("./src/routes/masterRoutes");
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/temples', templeRoutes);
+app.use("/api/v1/masters", masterRoutes);
 
 const PORT = process.env.PORT || 5000;
 

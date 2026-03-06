@@ -10,13 +10,10 @@ const protect = async (req, res, next) => {
         req.headers.authorization.startsWith("Bearer")
     ) {
         try {
-            // Get token from header
             token = req.headers.authorization.split(" ")[1];
 
-            // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-            // Get user from token
             req.user = await User.findById(decoded.id).select("-password");
 
             return next();
@@ -29,12 +26,19 @@ const protect = async (req, res, next) => {
     return errorResponse(res, "Not authorized, no token", 401);
 };
 
-const admin = (req, res, next) => {
-    if (req.user && req.user.role === "Admin") {
+const authorize = (...roles) => {
+    return (req, res, next) => {
+
+        if (!req.user) {
+            return errorResponse(res, "Not authorized", 401);
+        }
+
+        if (!roles.includes(req.user.role)) {
+            return errorResponse(res, "Access denied", 403);
+        }
+
         next();
-    } else {
-        return errorResponse(res, "Not authorized as an admin", 403);
-    }
+    };
 };
 
-module.exports = { protect, admin };
+module.exports = { protect, authorize };
