@@ -1,48 +1,42 @@
 const masterService = require("../services/masterService");
+const { successResponse, errorResponse } = require("../utils/apiResponse");
 
 const createMaster = async (req, res) => {
   try {
     const { type, name } = req.body;
-
     const data = await masterService.createMaster(type, { name });
-
-    res.status(201).json(data);
+    return successResponse(res, `${type} created successfully`, data, 201);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return errorResponse(res, error.message, 400);
   }
 };
 
 const getMasters = async (req, res) => {
   try {
     const data = await masterService.getMasters(req.params.type);
-
-    res.json(data);
+    return successResponse(res, "Masters retrieved successfully", data);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return errorResponse(res, error.message, 400);
   }
 };
 
 const updateMaster = async (req, res) => {
   try {
-    const data = await masterService.updateMaster(
-      req.params.type,
-      req.params.id,
-      req.body
-    );
-
-    res.json(data);
+    const { type, id } = req.params;
+    const data = await masterService.updateMaster(type, id, req.body);
+    return successResponse(res, `${type} updated successfully`, data);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return errorResponse(res, error.message, 400);
   }
 };
 
 const deleteMaster = async (req, res) => {
   try {
-    await masterService.deleteMaster(req.params.type, req.params.id);
-
-    res.json({ message: "Deleted successfully" });
+    const { type, id } = req.params;
+    await masterService.deleteMaster(type, id);
+    return successResponse(res, `${type} deleted successfully`);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return errorResponse(res, error.message, 400);
   }
 };
 

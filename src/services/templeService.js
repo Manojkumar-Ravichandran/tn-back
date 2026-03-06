@@ -19,8 +19,9 @@ const getTemples = async (queryParams) => {
 
   return {
     temples,
+    totalCount: count,
     totalPages: Math.ceil(count / limit),
-    currentPage: page
+    currentPage: parseInt(page)
   };
 };
 
@@ -39,8 +40,9 @@ const getPendingTemples = async (queryParams) => {
 
   return {
     temples,
+    totalCount: count,
     totalPages: Math.ceil(count / limit),
-    currentPage: page
+    currentPage: parseInt(page)
   };
 };
 
@@ -49,27 +51,32 @@ const getTempleBySlug = async (slug) => {
 };
 
 const getNearbyTemples = async ({ lat, lng, radius = 5000 }) => {
-
   if (!lat || !lng) {
     throw new Error("Latitude and Longitude required");
   }
 
-  return await templeRepo.findNearbyTemples(lat, lng, radius);
+  const temples = await templeRepo.findNearbyTemples(lat, lng, radius);
+  return {
+    temples,
+    totalCount: temples.length
+  };
 };
 
 const getMyTemples = async (userId) => {
-
-  return await templeRepo.findTemplesByContributor(userId);
-
+  const temples = await templeRepo.findTemplesByContributor(userId);
+  return {
+    temples,
+    totalCount: temples.length
+  };
 };
 
 const createTemple = async (data, userId) => {
 
-    const existingTemple = await templeRepo.findTempleByName(data.name);
+  const existingTemple = await templeRepo.findTempleByName(data.name);
 
-    if (existingTemple) {
+  if (existingTemple) {
     throw new Error("Temple already exists");
-    }
+  }
 
   if (!data.slug && data.name) {
     data.slug = slugify(data.name, { lower: true, strict: true });
@@ -125,13 +132,13 @@ const rejectTemple = async (id, reason) => {
 };
 
 module.exports = {
-    getTemples,
-    getPendingTemples,
-    getTempleBySlug,
-    getNearbyTemples,
-    createTemple,
-    updateTempleStatus,
-    approveTemple,
-    rejectTemple,
-    getMyTemples
+  getTemples,
+  getPendingTemples,
+  getTempleBySlug,
+  getNearbyTemples,
+  createTemple,
+  updateTempleStatus,
+  approveTemple,
+  rejectTemple,
+  getMyTemples
 };

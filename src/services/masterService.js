@@ -5,7 +5,11 @@ const createMaster = async (type, data) => {
 };
 
 const getMasters = async (type) => {
-  return await masterRepo.getMasters(type);
+  const masters = await masterRepo.getMasters(type);
+  return {
+    masters,
+    totalCount: masters.length
+  };
 };
 
 const updateMaster = async (type, id, data) => {
