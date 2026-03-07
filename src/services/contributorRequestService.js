@@ -40,8 +40,7 @@ const approveRequest = async (id) => {
 
   await requestRepo.updateStatus(id, "approved");
 
-//   const inviteLink = `${process.env.FRONTEND_URL}/set-password?token=${inviteToken}`;
-const inviteLink = `http://localhost:5000/api/v1/auth/set-password?token=${inviteToken}`;
+  const inviteLink = `http://localhost:5173/set-password?token=${inviteToken}`;
 
   await sendEmail(
     request.email,
