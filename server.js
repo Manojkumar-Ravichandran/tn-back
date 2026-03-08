@@ -8,7 +8,7 @@ require('dotenv').config();
 const app = express();
 
 // Middlewares
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());

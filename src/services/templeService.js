@@ -31,7 +31,7 @@ const getPendingTemples = async (queryParams) => {
 
   const query = {};
 
-  if (status) {
+  if (status && status !== "all") {
     query.status = status;
   }
 
