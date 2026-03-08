@@ -19,8 +19,8 @@ router.get(
   authorize("Contributor", "Trusted Contributor", "Admin"),
   templeController.getMyTemples
 );
-router.get("/:slug", templeController.getTempleBySlug);
 router.get("/nearby", templeController.getNearbyTemples);
+router.get("/:slug", templeController.getTempleBySlug);
 
 // Contributor
 router.post(
